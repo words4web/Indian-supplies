@@ -9,7 +9,7 @@ import { clearCart } from "@/lib/store/cartSlice";
 import { toast } from "sonner";
 
 export const useProfile = (options?: { enabled?: boolean }) => {
-  const { signIn, signOut } = useAuth();
+  const { signIn } = useAuth();
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
   const query = useQuery({
@@ -20,7 +20,7 @@ export const useProfile = (options?: { enabled?: boolean }) => {
     enabled: !!accessToken && options?.enabled !== false,
   });
 
-  const { data, isSuccess, isError } = query;
+  const { data, isSuccess } = query;
 
   useEffect(() => {
     if (isSuccess && data?.data?.user) {
@@ -32,10 +32,8 @@ export const useProfile = (options?: { enabled?: boolean }) => {
         business: user?.businessName || "",
         addresses: user?.addresses || [],
       });
-    } else if (isError) {
-      signOut();
     }
-  }, [isSuccess, isError, data, signIn, signOut]);
+  }, [isSuccess, data, signIn]);
 
   return query;
 };
