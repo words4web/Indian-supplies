@@ -88,12 +88,12 @@ export function useCart() {
   }, [user, clearCartMutation]);
 
   const itemCount = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.quantity, 0);
+    return items?.length || 0;
   }, [items]);
 
   const subtotal = useMemo(() => {
-    return items.reduce(
-      (sum, item) => sum + (item.product.price ?? 0) * item.quantity,
+    return items?.reduce(
+      (sum, item) => sum + (item?.product?.price ?? 0) * item?.quantity,
       0,
     );
   }, [items]);
@@ -102,8 +102,8 @@ export function useCart() {
     return items.reduce(
       (sum, item) =>
         sum +
-        (item.product.isVatApplicable
-          ? (item.product.price ?? 0) * 0.2 * item.quantity
+        (item?.product?.isVatApplicable
+          ? (item?.product.price ?? 0) * 0.2 * item?.quantity
           : 0),
       0,
     );

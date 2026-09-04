@@ -2,7 +2,6 @@ export const API_ROUTES = {
   AUTH: {
     LOGIN: "/user/auth/login",
     SIGNUP: "/user/auth/signup",
-    VERIFY_OTP: "/user/auth/verify-otp",
     REFRESH_TOKEN: "/user/auth/refresh-token",
     LOGOUT: "/user/auth/logout",
   },

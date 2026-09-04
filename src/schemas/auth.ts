@@ -3,6 +3,7 @@ import { UK_MOBILE_REGEX } from "@/constants/validation";
 
 export const loginSchema = z.object({
   email: z.string().trim().email("Please enter a valid email address."),
+  password: z.string().min(1, "Password is required."),
 });
 
 export const signupSchema = z.object({
@@ -22,6 +23,7 @@ export const signupSchema = z.object({
       UK_MOBILE_REGEX,
       "Please enter a valid UK mobile number (e.g. 07123456789 or +447123456789).",
     ),
+  password: z.string().min(6, "Password must be at least 6 characters."),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

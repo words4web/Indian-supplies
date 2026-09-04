@@ -14,15 +14,19 @@ import { useAuth } from "@/hooks/useAuth";
 export default function Page() {
   const { user } = useAuth();
 
-  const { data: categoriesData } = useCategories({ limit: 8 });
+  const { data: categoriesData, isLoading: isLoadingCategories } =
+    useCategories();
   const fetchedCategories = categoriesData?.data?.categories || [];
 
-  const { data: productsData } = useProducts({ limit: 8 });
+  const { data: productsData, isLoading: isLoadingProducts } = useProducts({
+    limit: 32,
+  });
   const fetchedProducts = productsData?.data?.products || [];
 
   const categories = fetchedCategories?.map((cat: any) => ({
     id: cat?._id,
     name: cat?.name,
+    slug: cat?.slug,
   }));
 
   const featured = fetchedProducts?.map((prod: any) => ({
@@ -44,8 +48,11 @@ export default function Page() {
       <PortalHeader />
       <main className="flex-grow">
         <HeroSection />
-        <CategoriesSection categories={categories} />
-        <ProductsSection products={featured} />
+        <CategoriesSection
+          categories={categories}
+          isLoading={isLoadingCategories}
+        />
+        <ProductsSection products={featured} isLoading={isLoadingProducts} />
         <FeaturesSection />
       </main>
       <Footer />

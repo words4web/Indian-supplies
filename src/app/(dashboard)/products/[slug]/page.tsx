@@ -3,9 +3,9 @@
 import { useParams } from "next/navigation";
 import { PortalHeader } from "@/components/portal-header";
 import { ProductDetail } from "@/components/product-detail";
-import { Loader } from "@/components/common/Loader";
 import { ErrorView } from "@/components/common/ErrorView";
 import { useProductDetail } from "@/services/product/product.hook";
+import { ProductDetailSkeleton } from "@/components/skeleton/product-detail-skeleton";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -17,9 +17,7 @@ export default function ProductPage() {
     return (
       <div className="min-h-screen bg-background">
         <PortalHeader />
-        <main className="flex items-center justify-center min-h-[400px]">
-          <Loader size="lg" />
-        </main>
+        <ProductDetailSkeleton />
       </div>
     );
   }
@@ -44,6 +42,7 @@ export default function ProductPage() {
     id: productData?._id,
     name: productData?.name,
     slug: productData?.slug,
+    description: productData?.description || "",
     pack: productData?.pack || null,
     price: productData?.price || null,
     categoryId:
@@ -54,6 +53,10 @@ export default function ProductPage() {
       typeof productData?.categoryId === "object"
         ? productData?.categoryId?.name
         : "",
+    isVatApplicable: productData?.isVatApplicable,
+    relatedProducts: Array.isArray(productData?.relatedProducts)
+      ? productData?.relatedProducts
+      : [],
   };
 
   return (

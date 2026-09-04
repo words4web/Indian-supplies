@@ -51,8 +51,10 @@ export function AddressModal({
   }, [isOpen]);
 
   useEffect(() => {
-    reset(defaultValues ?? emptyAddress);
-  }, [defaultValues, reset]);
+    if (isOpen) {
+      reset(defaultValues ?? emptyAddress);
+    }
+  }, [isOpen, defaultValues, reset]);
 
   useEffect(() => {
     const dialog = dialogRef.current;

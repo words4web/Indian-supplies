@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState } from "react";
+import { toast } from "sonner";
 import { PortalHeader } from "@/components/portal-header";
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,6 +12,7 @@ import { OrderSummary } from "@/components/dashboard/order-summary";
 import { DeliverySelection } from "@/components/dashboard/delivery-selection";
 import { OrderSuccess } from "@/components/dashboard/order-success";
 import Link from "next/link";
+import { CheckoutSkeleton } from "@/components/skeleton/checkout-skeleton";
 
 export default function CheckoutPage() {
   const { items, subtotal, vat = 0, clearCart, ready: cartReady } = useCart();
@@ -29,27 +31,24 @@ export default function CheckoutPage() {
       setConfirmation(order);
     },
     onError: (err: any) => {
-      setError(
+      const msg =
         err.response?.data?.message ||
-          "Failed to place order. Please try again.",
-      );
+        "Failed to place order. Please try again.";
+      setError(msg);
+      toast.error(msg);
     },
   });
 
   const addresses = user?.addresses || [];
-
-  useEffect(() => {
-    if (addresses?.length > 0 && !selectedAddressId) {
-      setSelectedAddressId(addresses[0]._id);
-    }
-  }, [addresses, selectedAddressId]);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError("");
 
     if (!selectedAddressId) {
-      setError("Please select a delivery address.");
+      const msg = "Please select a delivery address.";
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -57,12 +56,16 @@ export default function CheckoutPage() {
       (addr: any) => addr?._id === selectedAddressId,
     );
     if (!selectedAddress) {
-      setError("Selected address not found.");
+      const msg = "Selected address not found.";
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
     if (!items.length) {
-      setError("Your basket is empty.");
+      const msg = "Your basket is empty.";
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -92,16 +95,6 @@ export default function CheckoutPage() {
 
   const ready = cartReady && authReady;
 
-  if (!ready)
-    return (
-      <div className="min-h-screen bg-background">
-        <PortalHeader />
-        <div className="mx-auto max-w-3xl px-5 py-20 text-center text-muted-foreground">
-          Loading checkout…
-        </div>
-      </div>
-    );
-
   if (confirmation) {
     return (
       <div className="min-h-screen bg-background">
@@ -112,41 +105,48 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
       <PortalHeader />
-      <main className="mx-auto max-w-6xl px-5 py-10 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8 flex-1 w-full">
         <Link
           href="/cart"
-          className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary">
-          <ArrowLeft className="size-4" /> Back to basket
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="size-3.5 sm:size-4" /> Back to cart
         </Link>
-        <form
-          onSubmit={submit}
-          className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
-          <div className="flex flex-col gap-6">
-            <DeliverySelection
-              addresses={addresses}
-              selectedAddressId={selectedAddressId}
-              onSelectAddress={setSelectedAddressId}
-              notes={notes}
-              onChangeNotes={setNotes}
-            />
+
+        {!ready ? (
+          <CheckoutSkeleton />
+        ) : (
+          <form onSubmit={submit} className="mt-6 sm:mt-8 space-y-6">
             {error && (
-              <p
-                className="rounded-xl bg-destructive/10 px-3 py-2.5 text-sm font-semibold text-destructive"
+              <div
+                className="rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-xs sm:text-sm font-semibold text-destructive flex items-center justify-between"
                 role="alert">
-                {error}
-              </p>
+                <span>{error}</span>
+              </div>
             )}
-          </div>
-          <OrderSummary
-            items={items}
-            subtotal={subtotal}
-            vat={vat}
-            placing={createOrderMutation.isPending}
-            disabled={!selectedAddressId || createOrderMutation.isPending}
-          />
-        </form>
+            <div className="grid gap-6 lg:gap-8 lg:grid-cols-[1fr_360px] w-full min-w-0">
+              <div className="flex flex-col gap-6 min-w-0 w-full">
+                <DeliverySelection
+                  addresses={addresses}
+                  selectedAddressId={selectedAddressId}
+                  onSelectAddress={setSelectedAddressId}
+                  notes={notes}
+                  onChangeNotes={setNotes}
+                />
+              </div>
+              <div className="min-w-0 w-full">
+                <OrderSummary
+                  items={items}
+                  subtotal={subtotal}
+                  vat={vat}
+                  placing={createOrderMutation.isPending}
+                  disabled={createOrderMutation.isPending}
+                />
+              </div>
+            </div>
+          </form>
+        )}
       </main>
     </div>
   );

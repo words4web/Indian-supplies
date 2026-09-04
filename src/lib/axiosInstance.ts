@@ -63,11 +63,14 @@ axiosInstance.interceptors.response.use(
       (window.location.pathname === ROUTES.LOGIN ||
         window.location.pathname === ROUTES.SIGNUP);
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !isAuthPage
-    ) {
+    if (error.response?.status === 401) {
+      if (isAuthPage) {
+        store.dispatch(clearAuth());
+        return Promise.reject(error);
+      }
+
+      if (!originalRequest._retry) {
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -138,8 +141,10 @@ axiosInstance.interceptors.response.use(
         isRefreshing = false;
       }
     }
+  }
 
-    return Promise.reject(error);
+  return Promise.reject(error);
+
   },
 );
 

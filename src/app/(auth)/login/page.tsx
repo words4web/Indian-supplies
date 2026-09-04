@@ -4,28 +4,16 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useAuthFlow } from "@/hooks/useAuthFlow";
 import { LoginDetailsForm } from "@/components/auth/LoginDetailsForm";
-import { VerifyOtpForm } from "@/components/auth/VerifyOtpForm";
 
 export default function LoginPage() {
-  const { step, handleSendOTP, handleVerifyOTP, loading } = useAuthFlow({
+  const { handleSubmit, loading } = useAuthFlow({
     isLogin: true,
   });
 
   return (
     <div className="w-full max-w-md space-y-6 relative">
       <div className="mt-2">
-        {step === "details" ? (
-          <LoginDetailsForm
-            onSubmit={(data) => handleSendOTP({ email: data.email })}
-            isPending={loading}
-          />
-        ) : (
-          <VerifyOtpForm
-            description="Enter the 6-digit OTP code sent to your email and mobile number."
-            onSubmit={handleVerifyOTP}
-            isPending={loading}
-          />
-        )}
+        <LoginDetailsForm onSubmit={handleSubmit} isPending={loading} />
       </div>
 
       <div className="mt-6 flex flex-col items-center gap-3">

@@ -1,23 +1,15 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import { API_ROUTES } from "@/constants/api";
-import { SignupInput } from "@/schemas/auth";
+import { LoginInput, SignupInput } from "@/schemas/auth";
 
 export const authService = {
-  login: async (payload: { email: string }) => {
+  login: async (payload: LoginInput) => {
     const response = await axiosInstance.post(API_ROUTES.AUTH.LOGIN, payload);
     return response.data;
   },
 
   signup: async (payload: SignupInput) => {
     const response = await axiosInstance.post(API_ROUTES.AUTH.SIGNUP, payload);
-    return response.data;
-  },
-
-  verifyOtp: async (payload: { email: string; otp: string }) => {
-    const response = await axiosInstance.post(
-      API_ROUTES.AUTH.VERIFY_OTP,
-      payload,
-    );
     return response.data;
   },
 

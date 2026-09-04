@@ -121,7 +121,10 @@ export default function AccountPage() {
 
           <AddressSection
             addresses={user?.addresses || []}
-            onAddAddress={() => setShowAddressModal(true)}
+            onAddAddress={() => {
+              setEditingAddress(null);
+              setShowAddressModal(true);
+            }}
             onEditAddress={(address) => {
               setEditingAddress(address);
               setShowAddressModal(true);
