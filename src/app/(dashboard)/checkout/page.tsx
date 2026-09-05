@@ -1,6 +1,8 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ShoppingBag, ArrowRight, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { PortalHeader } from "@/components/portal-header";
@@ -75,13 +77,13 @@ export default function CheckoutPage() {
       selectedAddress?.city,
       selectedAddress?.postalCode,
     ]
-      .filter(Boolean)
-      .join(", ");
+      ?.filter(Boolean)
+      ?.join(", ");
 
     createOrderMutation.mutate({
-      items: items.map((item) => ({
-        productId: item.product.id,
-        quantity: item.quantity,
+      items: items?.map((item) => ({
+        productId: item?.product.id,
+        quantity: item?.quantity,
       })),
       delivery: {
         businessName: user?.business || "Not provided",
@@ -109,13 +111,30 @@ export default function CheckoutPage() {
       <PortalHeader />
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8 flex-1 w-full">
         <Link
-          href="/cart"
+          href={ROUTES.CART}
           className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
           <ArrowLeft className="size-3.5 sm:size-4" /> Back to cart
         </Link>
 
         {!ready ? (
           <CheckoutSkeleton />
+        ) : items?.length === 0 ? (
+          <div className="mt-12 flex flex-col items-center justify-center text-center">
+            <div className="flex size-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <ShoppingBag className="size-8" />
+            </div>
+            <h2 className="mt-4 font-serif text-2xl font-bold">
+              Your cart is empty
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+              You don&apos;t have any items in your shopping cart to checkout.
+            </p>
+            <Button asChild className="mt-6" size="lg">
+              <Link href={ROUTES.CATALOGUE}>
+                Browse Catalogue <ArrowRight className="size-4 ml-1.5" />
+              </Link>
+            </Button>
+          </div>
         ) : (
           <form onSubmit={submit} className="mt-6 sm:mt-8 space-y-6">
             {error && (

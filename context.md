@@ -62,7 +62,7 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 │   ├── portal-header.tsx     # CRM Header / Navigation bar with cart badge
 │   ├── product-card.tsx      # Catalogue item card
 │   ├── product-detail.tsx    # Detailed single product view
-│   └── product-visual.tsx    # Category icon mapping renderer
+│   └── product-visual.tsx    # Category icon mapping renderer (gradient placeholder visualization)
 │
 ├── constants/                # App Constants
 │   ├── api.ts                # Backend API endpoints mapping
