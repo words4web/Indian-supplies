@@ -12,6 +12,7 @@ import {
 import sessionStorage from "redux-persist/lib/storage/session";
 import authReducer from "./store/authSlice";
 import cartReducer from "./store/cartSlice";
+import notificationReducer from "./store/notificationSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -31,6 +32,7 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     cart: persistedCartReducer,
+    notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

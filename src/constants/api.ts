@@ -11,4 +11,12 @@ export const API_ROUTES = {
   PRODUCTS: "/user/products",
   CART: "/user/cart",
   ORDERS: "/user/orders",
+  NOTIFICATIONS: {
+    ROOT: "/user/notification",
+    UNREAD_COUNT: "/user/notification/unread-count",
+    READ_ALL: "/user/notification/read-all",
+    MARK_READ: (id: string) => `/user/notification/${id}/read`,
+    DEVICES_SYNC: "/user/notification/devices/sync",
+    DEVICES_REMOVE: "/user/notification/devices/remove",
+  },
 };

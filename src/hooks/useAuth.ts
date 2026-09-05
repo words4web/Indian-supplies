@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { clearAuth, setAuthUser, setAccessToken } from "@/lib/store/authSlice";
+import { setUnreadCount } from "@/lib/store/notificationSlice";
 import { AuthUser } from "@/types/auth/auth.types";
 import { useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import { clearCart } from "@/lib/store/cartSlice";
 import { toast } from "sonner";
 
 export const useProfile = (options?: { enabled?: boolean }) => {
+  const dispatch = useDispatch();
   const { signIn } = useAuth();
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
@@ -32,8 +34,11 @@ export const useProfile = (options?: { enabled?: boolean }) => {
         business: user?.businessName || "",
         addresses: user?.addresses || [],
       });
+      if (typeof data?.data?.unreadNotificationCount === "number") {
+        dispatch(setUnreadCount(data?.data?.unreadNotificationCount));
+      }
     }
-  }, [isSuccess, data, signIn]);
+  }, [isSuccess, data, signIn, dispatch]);
 
   return query;
 };

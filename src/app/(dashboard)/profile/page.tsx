@@ -12,6 +12,8 @@ import { ConfirmModal } from "@/components/common/ConfirmModal";
 import { AddressModal } from "@/components/common/AddressModal";
 import { AddressSection } from "@/components/dashboard/address-section";
 import { Footer } from "@/components/footer";
+import { NotificationToggle } from "@/components/dashboard/notification-toggle";
+import { BlockedPermissionBanner } from "@/components/dashboard/blocked-permission-banner";
 import {
   useCreateAddress,
   useDeleteAddress,
@@ -116,6 +118,11 @@ export default function AccountPage() {
                   </span>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-border space-y-4">
+              <BlockedPermissionBanner />
+              <NotificationToggle />
             </div>
           </div>
 

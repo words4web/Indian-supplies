@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,9 +10,13 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-extrabold tracking-tight text-primary-foreground">
-                IS
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Indian Supplies Logo"
+                width={40}
+                height={40}
+                className="size-10 shrink-0 rounded-xl object-contain"
+              />
               <div>
                 <span className="block font-serif text-base font-extrabold tracking-tight">
                   Indian Supplies

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { ReduxProvider } from "@/providers/redux-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "sonner";
+import { NotificationListener } from "@/components/common/notification-listener";
 import "./globals.css";
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
@@ -42,7 +43,10 @@ export default function RootLayout({
       className={`bg-background ${geistSans.variable} ${geistMono.variable} ${jakarta.variable}`}>
       <body className="font-sans antialiased">
         <ReduxProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <NotificationListener />
+            {children}
+          </QueryProvider>
         </ReduxProvider>
         <Toaster position="top-right" richColors />
         {process.env.NODE_ENV === "production" && <Analytics />}
