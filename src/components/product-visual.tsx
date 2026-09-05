@@ -52,9 +52,6 @@ export function ProductVisual({
       className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${tones[index]} ${large ? "min-h-72 md:min-h-96" : "aspect-[1.2]"}`}
       role="img"
       aria-label={`${product.name} product illustration`}>
-      <span className="absolute left-4 top-4 rounded-full bg-background/75 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-        Indian Supplies
-      </span>
       <Icon
         className={large ? "size-24 opacity-80" : "size-14 opacity-80"}
         strokeWidth={1.25}

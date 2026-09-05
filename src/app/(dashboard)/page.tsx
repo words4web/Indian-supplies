@@ -33,6 +33,7 @@ export default function Page() {
     id: prod?._id,
     name: prod?.name,
     slug: prod?.slug,
+    description: prod?.description || "",
     pack: prod?.pack || null,
     price: prod?.price || null,
     categoryId:

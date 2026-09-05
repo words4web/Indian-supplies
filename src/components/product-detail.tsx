@@ -176,9 +176,6 @@ export function ProductDetail({ product }: { product: Product }) {
                   Complementary items recommended for your store inventory
                 </p>
               </div>
-              <span className="text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-primary/10 text-primary shrink-0">
-                {relatedProductsList?.length} items
-              </span>
             </div>
             <ProductGrid products={relatedProductsList} />
           </section>

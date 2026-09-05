@@ -33,6 +33,8 @@ export interface DeliverySelectionProps {
   onChangeNotes: (value: string) => void;
 }
 
+export type OrderStatus = "IN_PROCESS" | "DELIVERED";
+
 export interface OrderSuccessProps {
   order: {
     orderId: string;
@@ -50,6 +52,6 @@ export interface OrderSuccessProps {
       phone: string;
       address: string;
     };
-    status: string;
+    status: OrderStatus;
   };
 }
