@@ -14,12 +14,14 @@ export interface ProductRow {
   description?: string;
   pack: string;
   price: number;
+  unit?: string;
   categoryId:
     | {
         _id: string;
         name: string;
       }
     | string;
+  keywords?: string[];
   relatedProducts?: RelatedProductItem[] | string[];
   isVatApplicable: boolean;
   isActive: boolean;
@@ -34,8 +36,10 @@ export interface Product {
   description?: string;
   pack: string | null;
   price: number | null;
+  unit?: string;
   categoryId: string;
   categoryName: string;
+  keywords?: string[];
   relatedProducts?: RelatedProductItem[] | string[];
   isVatApplicable?: boolean;
   imageUrl?: string;

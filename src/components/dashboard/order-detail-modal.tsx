@@ -151,7 +151,7 @@ export function OrderDetailModal({
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5">
                       <span className="font-medium">{item?.quantity} ×</span>{" "}
-                      {formatPounds(item?.priceAtOrder || 0)}
+                      {formatPounds(item?.price || 0)}
                       {pack && (
                         <span className="ml-1 text-muted-foreground/70">
                           • {pack}
@@ -160,9 +160,7 @@ export function OrderDetailModal({
                     </p>
                   </div>
                   <p className="font-bold text-foreground text-right shrink-0">
-                    {formatPounds(
-                      (item?.priceAtOrder || 0) * (item?.quantity || 0),
-                    )}
+                    {formatPounds((item?.price || 0) * (item?.quantity || 0))}
                   </p>
                 </div>
               );

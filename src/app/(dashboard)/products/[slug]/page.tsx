@@ -45,6 +45,7 @@ export default function ProductPage() {
     description: productData?.description || "",
     pack: productData?.pack || null,
     price: productData?.price || null,
+    unit: productData?.unit,
     categoryId:
       typeof productData?.categoryId === "object"
         ? productData?.categoryId?._id

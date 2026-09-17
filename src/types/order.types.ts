@@ -15,7 +15,7 @@ export interface OrderItemProduct {
 export interface OrderItem {
   productId: OrderItemProduct | string;
   quantity: number;
-  priceAtOrder: number;
+  price: number;
 }
 
 export interface DeliveryDetails {
@@ -91,7 +91,7 @@ export interface OrderSuccessProps {
     items: Array<{
       productId: string;
       quantity: number;
-      priceAtOrder: number;
+      price: number;
     }>;
     delivery: DeliveryDetails;
     status: OrderStatus;

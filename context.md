@@ -14,6 +14,7 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 
 - **Framework**: Next.js 16.3.0 (using App Router & Turbopack)
 - **Runtime**: React 19 & React DOM 19
+- **State Management**: Redux Toolkit & Redux Persist (`localStorage` for persistent Auth & Notification preferences)
 - **Data Fetching & Cache**: TanStack React Query (`@tanstack/react-query`)
 - **API Client**: Axios (configured with token refresh interceptors)
 - **Push Notifications & Messaging**: Firebase Web SDK (`firebase/app`, `firebase/messaging`) + Service Worker

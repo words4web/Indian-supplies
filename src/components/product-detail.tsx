@@ -112,8 +112,13 @@ export function ProductDetail({ product }: { product: Product }) {
                     )}
                   </div>
                 </div>
-                <div className="rounded-lg sm:rounded-xl bg-secondary px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-bold text-secondary-foreground shadow-sm shrink-0">
-                  {product?.pack ?? "Wholesale pack"}
+                <div className="rounded-lg sm:rounded-xl bg-secondary px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-bold text-secondary-foreground shadow-sm shrink-0 flex items-center gap-1.5">
+                  <span>{product?.pack ?? "Wholesale pack"}</span>
+                  {product?.unit && (
+                    <span className="capitalize px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] sm:text-[11px]">
+                      Per {product.unit}
+                    </span>
+                  )}
                 </div>
               </div>
 
