@@ -34,10 +34,10 @@ export const useUnreadCountQuery = (enabled = true) => {
   });
 };
 
-export const useNotificationsQuery = (page = 1, enabled = true) => {
+export const useNotificationsQuery = (page = 1, limit = 10, enabled = true) => {
   return useQuery({
     queryKey: NOTIFICATION_QUERY_KEYS.list(page),
-    queryFn: () => notificationService.getNotifications(page),
+    queryFn: () => notificationService.getNotifications(page, limit),
     enabled,
   });
 };

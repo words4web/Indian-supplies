@@ -33,6 +33,7 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 │   │   ├── cart/             # Cart overview with quantity controls & scrollable item list
 │   │   ├── catalogue/        # Category filtering & product search catalogue
 │   │   ├── checkout/         # Delivery selection & Order summary checkout flow
+│   │   ├── notifications/    # Client notification inbox with read/unread states
 │   │   ├── orders/           # Client past order history (Segmented control tab system: In Process & Delivered, OrderSkeleton)
 │   │   ├── products/[slug]/  # Single product details page (dynamic routing with related items)
 │   │   ├── profile/          # Business client profile, delivery address management, & NotificationToggle
@@ -60,21 +61,22 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 │   │   ├── order-summary.tsx      # Checkout summary card
 │   │   ├── order-success.tsx      # Order confirmation view
 │   │   └── products-section.tsx   # Featured products grid
-│   ├── skeleton/             # Skeleton loading UI states (OrderSkeleton, CartSkeleton, etc.)
+│   ├── skeleton/             # Skeleton loading UI states (OrderSkeleton, CartSkeleton, CheckoutSkeleton, etc.)
 │   ├── ui/                   # Low-level UI primitives (Button, Modal, etc.)
 │   ├── footer.tsx            # Portal footer
-│   ├── portal-header.tsx     # CRM Header / Navigation bar with cart badge
+│   ├── portal-header.tsx     # CRM Header / Navigation bar with cart badge and notification indicator
 │   ├── product-card.tsx      # Catalogue item card
 │   ├── product-detail.tsx    # Detailed single product view
 │   └── product-visual.tsx    # Category icon mapping renderer
 │
 ├── constants/                # App Constants
-│   ├── api.ts                # Backend API endpoints mapping (NOTIFICATIONS endpoints included)
+│   ├── api.ts                # Backend API endpoints mapping (ORDERS, NOTIFICATIONS, AUTH, PRODUCTS, CART, ADDRESSES)
 │   ├── routes.ts             # Application routing definitions & helper builders
 │   └── storage.ts            # Local and session storage keys (FCM_TOKEN, NOTIFICATIONS_ENABLED, NOTIF_BANNER_DISMISSED)
 │
 ├── hooks/                    # Custom React Hooks
 │   ├── useAuth.ts            # Auth context accessor hook
+│   ├── useAuthFlow.ts        # Dynamic authentication redirect & login flow hook
 │   ├── useCart.ts            # Shopping cart context accessor hook
 │   ├── useCatalogueFilters.ts# URL-synced search and category filter state
 │   ├── useDebounce.ts        # Search input debouncing hook
@@ -91,8 +93,8 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 │   ├── address/              # Address CRUD mutations & services
 │   ├── auth/                 # Authentication mutations & services
 │   ├── category/             # Category query hooks & services
-│   ├── notification/         # Notification API service & React Query hooks (useSyncDevice, useRemoveDevice, etc.)
-│   ├── order/                # Order creation & retrieval hooks
+│   ├── notification/         # Notification API service & React Query hooks (useNotificationsQuery, useSyncDevice, useRemoveDevice)
+│   ├── order/                # Order creation mutation (`useCreateOrder`) & order list queries (`useOrdersQuery`)
 │   └── product/              # Product query hooks & services
 │
 └── types/                    # Core TypeScript Interfaces
@@ -106,25 +108,20 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 
 ---
 
-## 4. Key Data Models & Types
+## 4. Key Workflows & Data Flow
 
-### Push Notifications & Device Lifecycle (`types/notification.types.ts`)
+### 1. Secure Checkout & Order Submission
 
-- **`INotificationState`**:
-  ```typescript
-  export interface INotificationState {
-    unreadCount: number;
-    fcmToken: string | null;
-    permissionStatus: "default" | "granted" | "denied" | "unsupported";
-    isToggledOn: boolean;
-  }
-  ```
+- **Checkout Submission (`/checkout`)**:
+  - The client selects a verified delivery address (`selectedAddressId`) and optional notes.
+  - Submits `{ addressId, notes? }` to `orderService.create` (`POST /api/v1/user/orders`).
+  - Items, prices, and address snapshots are securely computed on the backend from the user's MongoDB `Cart` and authenticated user profile.
+  - Upon success, automatically clears client cart cache and displays the `OrderSuccess` confirmation view.
 
----
+### 2. State Management & Data Flow
 
-## 5. State Management & Data Flow
-
-- **Auth Context (`useAuth`)**: Manages logged-in user profile (`user`, `ready`). Unauthenticated users attempting to access protected pages (`/orders`, `/profile`) are redirected to `/login`.
+- **Auth Context (`useAuth` & `useAuthFlow`)**: Manages logged-in user profile (`user`, `ready`). Unauthenticated users attempting to access protected pages (`/orders`, `/profile`, `/checkout`) are redirected to `/login`.
+- **Cart Context (`useCart`)**: Synchronizes with server-side cart state using TanStack Query, offering quantity increment, decrement, and item removal.
 - **FCM Push Notification Lifecycle (`useFcmLifecycle` & `NotificationListener`)**:
   - Automatically requests browser permissions, registers `firebase-messaging-sw.js`, fetches FCM tokens, and syncs device tokens with `/api/v1/user/notification/devices/sync`.
   - Automatically revokes tokens via `/devices/remove` on logout or when toggled off in settings.

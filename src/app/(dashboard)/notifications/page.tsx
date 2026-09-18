@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { PortalHeader } from "@/components/portal-header";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,12 +24,15 @@ import { NotificationItem } from "@/types/notification.types";
 const LIMIT = 10;
 
 export default function NotificationsPage() {
-  const router = useRouter();
   const dispatch = useDispatch();
   const { user, ready } = useAuth();
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isFetching } = useNotificationsQuery(page, LIMIT);
+  const { data, isLoading, isFetching } = useNotificationsQuery(
+    page,
+    LIMIT,
+    ready && !!user,
+  );
   const markReadMutation = useMarkReadMutation();
 
   const notifications: NotificationItem[] =

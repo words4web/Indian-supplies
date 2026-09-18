@@ -54,16 +54,6 @@ export default function CheckoutPage() {
       return;
     }
 
-    const selectedAddress = addresses?.find(
-      (addr: any) => addr?._id === selectedAddressId,
-    );
-    if (!selectedAddress) {
-      const msg = "Selected address not found.";
-      setError(msg);
-      toast.error(msg);
-      return;
-    }
-
     if (!items.length) {
       const msg = "Your basket is empty.";
       setError(msg);
@@ -71,27 +61,9 @@ export default function CheckoutPage() {
       return;
     }
 
-    const formattedAddress = [
-      selectedAddress?.streetAddress,
-      selectedAddress?.building,
-      selectedAddress?.city,
-      selectedAddress?.postalCode,
-    ]
-      ?.filter(Boolean)
-      ?.join(", ");
-
     createOrderMutation.mutate({
-      items: items?.map((item) => ({
-        productId: item?.product.id,
-        quantity: item?.quantity,
-      })),
-      delivery: {
-        businessName: user?.business || "Not provided",
-        contactPerson: selectedAddress?.fullName || user?.name || "",
-        phone: selectedAddress?.phone,
-        address: formattedAddress,
-        notes: notes || undefined,
-      },
+      addressId: selectedAddressId,
+      notes: notes?.trim() || undefined,
     });
   }
 
