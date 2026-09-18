@@ -40,25 +40,14 @@ export const useLogin = (options?: {
 export const useSignup = (options?: {
   onSuccess?: (data: any, variables: SignupInput) => void;
 }) => {
-  const { signIn } = useAuth();
   return useMutation({
     mutationFn: (payload: SignupInput) => authService.signup(payload),
     onSuccess: (res, variables) => {
-      toast.success(res?.message || "Registration successful.");
-      const accessToken = res?.data?.accessToken;
-      const user = res?.data?.user;
-      if (accessToken && user) {
-        signIn(
-          {
-            id: user?.id,
-            name: user?.fullName,
-            email: user?.email,
-            business: user?.businessName || "",
-            addresses: user?.addresses || [],
-          },
-          accessToken,
-        );
-      }
+      toast.success(
+        res?.message ||
+          "Registration successful! Your account is pending admin approval.",
+        { duration: 6000 },
+      );
       options?.onSuccess?.(res, variables);
     },
     onError: (error: any) => {

@@ -134,16 +134,6 @@ export function NotificationToggle({
           />
         </button>
       </div>
-
-      {isDenied && (
-        <div className="flex items-start gap-2 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 px-3 py-2.5">
-          <Settings className="size-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-            Notifications are blocked by your browser. Please allow
-            notifications in your browser URL bar/settings to receive updates.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

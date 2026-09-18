@@ -2,19 +2,20 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useLogin, useSignup } from "@/services/auth/auth.hook";
 import { LoginInput, SignupInput } from "@/schemas/auth";
+import { ROUTES } from "@/constants/routes";
 
 export function useAuthFlow({ isLogin }: { isLogin: boolean }) {
   const router = useRouter();
 
   const loginMutation = useLogin({
     onSuccess: () => {
-      router.push("/");
+      router.push(ROUTES.HOME);
     },
   });
 
   const signupMutation = useSignup({
     onSuccess: () => {
-      router.push("/");
+      router.push(ROUTES.LOGIN);
     },
   });
 
