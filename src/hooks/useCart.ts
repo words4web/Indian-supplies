@@ -30,6 +30,11 @@ export function useCart() {
           slug: prod?.slug,
           pack: prod?.pack || null,
           price: prod?.price || null,
+          images: Array.isArray(prod?.images) ? prod?.images : [],
+          imageUrl:
+            Array.isArray(prod?.images) && prod?.images?.length > 0
+              ? prod?.images?.[0]
+              : undefined,
           categoryId:
             typeof prod?.categoryId === "object"
               ? prod?.categoryId?._id

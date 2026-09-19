@@ -10,6 +10,7 @@ export interface OrderItemProduct {
   pack?: string;
   price: number;
   description?: string;
+  images?: string[];
 }
 
 export interface OrderItem {

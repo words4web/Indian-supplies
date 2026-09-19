@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { ArrowRight, Package } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { formatPounds } from "@/lib/format";
 import { Button } from "@/components/ui/button";
+import { ProductImage } from "@/components/common/ProductImage";
 import { OrderSummaryProps } from "@/types/order.types";
 
 export function OrderSummary({
@@ -31,19 +31,18 @@ export function OrderSummary({
           <div
             key={product?.id}
             className="group flex items-center gap-3 p-2 sm:p-2.5 rounded-xl border border-border/50 bg-background/60 hover:bg-accent/40 transition-colors">
-            <div className="relative size-11 sm:size-12 shrink-0 rounded-lg overflow-hidden border border-border/60 bg-muted flex items-center justify-center">
-              {product?.imageUrl ? (
-                <Image
-                  src={product.imageUrl}
-                  alt={product?.name || "Product"}
-                  fill
-                  sizes="48px"
-                  className="object-cover group-hover:scale-105 transition-transform duration-200"
-                />
-              ) : (
-                <Package className="size-5 text-muted-foreground/60" />
-              )}
-              <span className="absolute bottom-0.5 right-0.5 min-w-5 h-4 px-1 rounded-md bg-foreground/90 text-[10px] font-bold text-background flex items-center justify-center shadow-xs">
+            <div className="relative shrink-0">
+              <ProductImage
+                src={
+                  product?.imageUrl ||
+                  (Array.isArray(product?.images) && product?.images?.length > 0
+                    ? product.images[0]
+                    : undefined)
+                }
+                alt={product?.name || "Product"}
+                size="sm"
+              />
+              <span className="absolute bottom-0.5 right-0.5 min-w-5 h-4 px-1 rounded-md bg-foreground/90 text-[10px] font-bold text-background flex items-center justify-center shadow-xs z-10">
                 x{quantity}
               </span>
             </div>

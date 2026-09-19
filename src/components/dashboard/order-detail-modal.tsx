@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProductImage } from "@/components/common/ProductImage";
 import { ROUTES } from "@/constants/routes";
 import { OrderDetailModalProps } from "@/types/order.types";
 import { formatPounds } from "@/lib/format";
@@ -127,37 +128,50 @@ export function OrderDetailModal({
                 typeof item?.productId === "object" ? item.productId : null;
               const name = prod?.name || "Product Item";
               const pack = prod?.pack ? ` (${prod?.pack})` : "";
+              const imgUrl =
+                Array.isArray(prod?.images) && prod?.images?.length > 0
+                  ? prod?.images?.[0]
+                  : undefined;
+
               return (
                 <div
                   key={prod?._id || idx}
                   className="p-3 sm:p-4 flex items-center justify-between gap-3 text-sm hover:bg-muted/20 transition-colors">
-                  <div className="min-w-0 flex-1">
-                    {prod?.slug ? (
-                      <Link
-                        href={ROUTES.PRODUCT_DETAIL(prod?.slug)}
-                        onClick={(e) => {
-                          if (!e.ctrlKey && !e.metaKey) {
-                            onOpenChange(false);
-                          }
-                        }}
-                        className="font-bold text-foreground hover:text-primary transition-colors flex items-center gap-1.5 group truncate">
-                        <span className="truncate">{name}</span>
-                        <ExternalLink className="size-3 text-muted-foreground group-hover:text-primary shrink-0 opacity-70" />
-                      </Link>
-                    ) : (
-                      <p className="font-bold text-foreground truncate">
-                        {name}
-                      </p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      <span className="font-medium">{item?.quantity} ×</span>{" "}
-                      {formatPounds(item?.price || 0)}
-                      {pack && (
-                        <span className="ml-1 text-muted-foreground/70">
-                          • {pack}
-                        </span>
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <ProductImage
+                      src={imgUrl}
+                      alt={name}
+                      size="sm"
+                      containerClassName="shrink-0"
+                    />
+                    <div className="min-w-0 flex-1">
+                      {prod?.slug ? (
+                        <Link
+                          href={ROUTES.PRODUCT_DETAIL(prod?.slug)}
+                          onClick={(e) => {
+                            if (!e.ctrlKey && !e.metaKey) {
+                              onOpenChange(false);
+                            }
+                          }}
+                          className="font-bold text-foreground hover:text-primary transition-colors flex items-center gap-1.5 group truncate">
+                          <span className="truncate">{name}</span>
+                          <ExternalLink className="size-3 text-muted-foreground group-hover:text-primary shrink-0 opacity-70" />
+                        </Link>
+                      ) : (
+                        <p className="font-bold text-foreground truncate">
+                          {name}
+                        </p>
                       )}
-                    </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        <span className="font-medium">{item?.quantity} ×</span>{" "}
+                        {formatPounds(item?.price || 0)}
+                        {pack && (
+                          <span className="ml-1 text-muted-foreground/70">
+                            • {pack}
+                          </span>
+                        )}
+                      </p>
+                    </div>
                   </div>
                   <p className="font-bold text-foreground text-right shrink-0">
                     {formatPounds((item?.price || 0) * (item?.quantity || 0))}

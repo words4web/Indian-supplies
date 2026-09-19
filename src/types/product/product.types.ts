@@ -22,6 +22,7 @@ export interface ProductRow {
       }
     | string;
   keywords?: string[];
+  images?: string[];
   relatedProducts?: RelatedProductItem[] | string[];
   isVatApplicable: boolean;
   isActive: boolean;
@@ -40,6 +41,7 @@ export interface Product {
   categoryId: string;
   categoryName: string;
   keywords?: string[];
+  images?: string[];
   relatedProducts?: RelatedProductItem[] | string[];
   isVatApplicable?: boolean;
   imageUrl?: string;

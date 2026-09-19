@@ -55,7 +55,7 @@ export function Footer() {
                 <Link
                   href="/orders"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  My Orders
+                  Orders
                 </Link>
               </li>
             </ul>

@@ -15,49 +15,63 @@ export function useCatalogueFilters(categories: CategoryItem[]) {
 
   const debouncedQuery = useDebounce(queryFromUrl, 500);
 
-  const activeCategory =
-    categories?.find(
-      (cat) => cat?.slug === categoryFromUrl || cat?.id === categoryFromUrl,
-    ) || (categories?.length > 0 ? categories[0] : null);
+  const isSearching = Boolean(queryFromUrl.trim());
 
-  const selectedCategoryIdentifier =
-    categoryFromUrl ||
-    (activeCategory ? activeCategory?.slug || activeCategory?.id : "");
+  const activeCategory = isSearching
+    ? null
+    : categories?.find(
+        (cat) => cat?.slug === categoryFromUrl || cat?.id === categoryFromUrl,
+      ) || (categories?.length > 0 ? categories[0] : null);
+
+  const selectedCategoryIdentifier = isSearching
+    ? ""
+    : categoryFromUrl ||
+      (activeCategory ? activeCategory?.slug || activeCategory?.id : "");
 
   useEffect(() => {
-    if (!categoryFromUrl && activeCategory) {
+    if (!isSearching && !categoryFromUrl && activeCategory) {
       const defaultSlug = activeCategory.slug || activeCategory.id;
       const params = new URLSearchParams(searchParams.toString());
       params.set("category", defaultSlug);
       router.replace(`${pathname}?${params.toString()}`);
     }
-  }, [categoryFromUrl, activeCategory, pathname, router, searchParams]);
+  }, [
+    isSearching,
+    categoryFromUrl,
+    activeCategory,
+    pathname,
+    router,
+    searchParams,
+  ]);
 
   const selectCategory = useCallback(
     (categorySlugOrId: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams();
       params.set("category", categorySlugOrId);
       router.push(`${pathname}?${params.toString()}`);
     },
-    [pathname, router, searchParams],
+    [pathname, router],
   );
 
   const setQuery = useCallback(
     (newQuery: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (newQuery) {
+      const trimmed = newQuery.trim();
+      const params = new URLSearchParams();
+      if (trimmed) {
         params.set("search", newQuery);
       } else {
-        params.delete("search");
+        if (categories?.length > 0) {
+          params.set("category", categories[0]?.slug || categories[0]?.id);
+        }
       }
       router.push(`${pathname}?${params.toString()}`);
     },
-    [pathname, router, searchParams],
+    [categories, pathname, router],
   );
 
   const resetFilters = useCallback(() => {
     const params = new URLSearchParams();
-    if (categories.length > 0) {
+    if (categories?.length > 0) {
       params.set("category", categories[0]?.slug || categories[0]?.id);
     }
     router.push(`${pathname}?${params.toString()}`);

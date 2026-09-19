@@ -38,9 +38,9 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-background">
       <PortalHeader />
-      <main className="mx-auto max-w-5xl px-5 pt-5 pb-12">
+      <main className="mx-auto max-w-5xl px-3.5 sm:px-5 pt-4 sm:pt-5 pb-12">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[.14em] text-primary">
+          <p className="text-xs sm:text-sm font-bold uppercase tracking-[.14em] text-primary">
             Order history
           </p>
         </div>

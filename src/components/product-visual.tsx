@@ -1,3 +1,5 @@
+import { ProductImage } from "@/components/common/ProductImage";
+import type { Product } from "@/types/product/product.types";
 import {
   Box,
   CupSoda,
@@ -8,7 +10,6 @@ import {
   Sprout,
   Waves,
 } from "lucide-react";
-import type { Product } from "@/types/product/product.types";
 
 const icons = [
   Sprout,
@@ -20,6 +21,7 @@ const icons = [
   Waves,
   Box,
 ];
+
 const tones = [
   "from-emerald-100 to-lime-50 text-emerald-700",
   "from-sky-100 to-cyan-50 text-sky-700",
@@ -41,22 +43,32 @@ function toneIndex(value: string) {
 export function ProductVisual({
   product,
   large = false,
+  imageIndex = 0,
 }: {
   product: Product;
   large?: boolean;
+  imageIndex?: number;
 }) {
-  const index = toneIndex(product.categoryId + product.id);
-  const Icon = icons[index];
+  const images =
+    Array.isArray(product?.images) && product?.images?.length > 0
+      ? product?.images
+      : product?.imageUrl
+        ? [product?.imageUrl]
+        : [];
+
+  const displayImage = images[imageIndex] || images[0];
+
   return (
-    <div
-      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${tones[index]} ${large ? "min-h-72 md:min-h-96" : "aspect-[1.2]"}`}
-      role="img"
-      aria-label={`${product.name} product illustration`}>
-      <Icon
-        className={large ? "size-24 opacity-80" : "size-14 opacity-80"}
-        strokeWidth={1.25}
-      />
-    </div>
+    <ProductImage
+      src={displayImage}
+      alt={product?.name || "Product image"}
+      size={large ? "xl" : "full"}
+      priority={large}
+      containerClassName={
+        large ? "rounded-none border-0" : "rounded-none border-0 aspect-square"
+      }
+      className="group-hover:scale-105"
+    />
   );
 }
 
@@ -67,13 +79,13 @@ export function CategoryVisual({
   category: { id: string; name: string };
   index?: number;
 }) {
-  const tone = (toneIndex(category.id) + index) % tones.length;
-  const Icon = icons[tone];
+  const tone = (toneIndex(category?.id || "") + index) % tones?.length;
+  const Icon = icons[tone] || Package;
   return (
     <div
-      className={`flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${tones[tone]}`}
+      className={`flex size-10 sm:size-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br ${tones[tone]} transition-transform group-hover:scale-105`}
       aria-hidden="true">
-      <Icon className="size-6" strokeWidth={1.5} />
+      <Icon className="size-5 sm:size-6" strokeWidth={1.5} />
     </div>
   );
 }

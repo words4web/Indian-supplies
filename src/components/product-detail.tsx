@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, Minus, Plus, ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { ProductImage } from "@/components/common/ProductImage";
 import type { Product } from "@/types/product/product.types";
 import { useCart } from "@/hooks/useCart";
 import { formatPounds } from "@/lib/format";
@@ -19,6 +20,14 @@ export function ProductDetail({ product }: { product: Product }) {
   const { user } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const images =
+    Array.isArray(product?.images) && product?.images?.length > 0
+      ? product?.images
+      : product?.imageUrl
+        ? [product?.imageUrl]
+        : [];
 
   function add() {
     addItem(product, quantity);
@@ -34,6 +43,11 @@ export function ProductDetail({ product }: { product: Product }) {
         description: rel?.description || "",
         pack: rel?.pack || null,
         price: rel?.price || null,
+        images: Array.isArray(rel?.images) ? rel?.images : [],
+        imageUrl:
+          Array.isArray(rel?.images) && rel?.images?.length > 0
+            ? rel?.images?.[0]
+            : undefined,
         categoryId: product?.categoryId,
         categoryName: product?.categoryName,
       }))
@@ -59,8 +73,38 @@ export function ProductDetail({ product }: { product: Product }) {
         </button>
 
         <div className="grid gap-6 sm:gap-8 md:gap-10 md:grid-cols-2 md:items-start">
-          <div className="w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border/80 bg-card shadow-sm flex flex-col justify-center min-h-[260px] sm:min-h-[380px] md:sticky md:top-24">
-            <ProductVisual product={product} large />
+          <div className="space-y-3.5 md:sticky md:top-24">
+            <div className="w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border/80 bg-card shadow-sm flex flex-col justify-center min-h-[260px] sm:min-h-[380px]">
+              <ProductVisual
+                product={product}
+                large
+                imageIndex={selectedImageIndex}
+              />
+            </div>
+
+            {images?.length > 1 && (
+              <div className="flex items-center gap-2.5 overflow-x-auto pb-1.5 scrollbar-thin">
+                {images?.map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`relative size-16 sm:size-20 shrink-0 rounded-xl sm:rounded-2xl border-2 overflow-hidden bg-muted/30 transition-all cursor-pointer ${
+                      selectedImageIndex === idx
+                        ? "border-primary shadow-sm scale-102"
+                        : "border-border/60 hover:border-primary/50 opacity-70 hover:opacity-100"
+                    }`}
+                    aria-label={`View product image ${idx + 1}`}>
+                    <ProductImage
+                      src={imgUrl}
+                      alt={`${product?.name} thumbnail ${idx + 1}`}
+                      size="md"
+                      containerClassName="size-full rounded-none border-0"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col justify-between space-y-5 sm:space-y-6">

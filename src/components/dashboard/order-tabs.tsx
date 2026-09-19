@@ -10,19 +10,19 @@ export function OrderTabs({
   deliveredCount,
 }: OrderTabsProps) {
   return (
-    <div className="inline-flex w-full sm:w-auto items-center gap-2 rounded-2xl bg-muted/80 p-1.5 text-base font-medium border border-border/50">
+    <div className="grid grid-cols-2 w-full sm:w-auto sm:inline-flex items-center gap-1.5 sm:gap-2 rounded-2xl bg-muted/80 p-1 sm:p-1.5 text-sm sm:text-base font-medium border border-border/50">
       <button
         type="button"
         onClick={() => onTabChange("IN_PROCESS")}
-        className={`flex flex-1 sm:flex-initial items-center justify-center gap-2.5 rounded-xl px-6 py-3 text-base font-bold transition-all cursor-pointer ${
+        className={`flex items-center justify-center gap-1.5 sm:gap-2.5 rounded-xl px-2.5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-base font-bold transition-all cursor-pointer truncate ${
           activeTab === "IN_PROCESS"
-            ? "bg-card text-foreground shadow-md border border-border/60"
+            ? "bg-card text-foreground shadow-xs border border-border/60"
             : "text-muted-foreground hover:text-foreground hover:bg-card/50"
         }`}>
-        <Clock className="size-5 text-amber-500" />
-        <span>In Process</span>
+        <Clock className="size-3.5 sm:size-5 text-amber-500 shrink-0" />
+        <span className="truncate">In Process</span>
         <span
-          className={`ml-1.5 rounded-full px-2.5 py-0.5 text-xs font-black transition-colors ${
+          className={`ml-1 rounded-full px-1.5 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-extrabold transition-colors shrink-0 ${
             activeTab === "IN_PROCESS"
               ? "bg-amber-500/20 text-amber-600"
               : "bg-background text-muted-foreground"
@@ -34,15 +34,15 @@ export function OrderTabs({
       <button
         type="button"
         onClick={() => onTabChange("DELIVERED")}
-        className={`flex flex-1 sm:flex-initial items-center justify-center gap-2.5 rounded-xl px-6 py-3 text-base font-bold transition-all cursor-pointer ${
+        className={`flex items-center justify-center gap-1.5 sm:gap-2.5 rounded-xl px-2.5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-base font-bold transition-all cursor-pointer truncate ${
           activeTab === "DELIVERED"
-            ? "bg-card text-foreground shadow-md border border-border/60"
+            ? "bg-card text-foreground shadow-xs border border-border/60"
             : "text-muted-foreground hover:text-foreground hover:bg-card/50"
         }`}>
-        <CheckCircle2 className="size-5 text-emerald-500" />
-        <span>Delivered</span>
+        <CheckCircle2 className="size-3.5 sm:size-5 text-emerald-500 shrink-0" />
+        <span className="truncate">Delivered</span>
         <span
-          className={`ml-1.5 rounded-full px-2.5 py-0.5 text-xs font-black transition-colors ${
+          className={`ml-1 rounded-full px-1.5 sm:px-2.5 py-0.5 text-[10px] sm:text-xs font-extrabold transition-colors shrink-0 ${
             activeTab === "DELIVERED"
               ? "bg-emerald-500/20 text-emerald-600"
               : "bg-background text-muted-foreground"

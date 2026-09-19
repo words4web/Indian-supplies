@@ -46,6 +46,11 @@ export default function ProductPage() {
     pack: productData?.pack || null,
     price: productData?.price || null,
     unit: productData?.unit,
+    images: Array.isArray(productData?.images) ? productData?.images : [],
+    imageUrl:
+      Array.isArray(productData?.images) && productData?.images?.length > 0
+        ? productData.images[0]
+        : undefined,
     categoryId:
       typeof productData?.categoryId === "object"
         ? productData?.categoryId?._id
