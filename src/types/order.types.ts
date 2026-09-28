@@ -43,7 +43,7 @@ export interface Order {
 
 export interface OrderCardProps {
   order: Order;
-  onViewDetails: (order: Order) => void;
+  onViewDetails?: (order: Order) => void;
 }
 
 export interface OrderDetailModalProps {

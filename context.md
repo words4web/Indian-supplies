@@ -152,3 +152,8 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
   - Automatically requests browser permissions, registers `firebase-messaging-sw.js`, fetches FCM tokens, and syncs device tokens with `/api/v1/user/notification/devices/sync`.
   - Automatically revokes tokens via `/devices/remove` on logout or when toggled off in settings.
   - Listens for foreground pushes via `onForegroundMessage()`, displaying interactive Sonner toast notifications and auto-invalidating `["orders"]` and `["notifications"]` React Query caches.
+- **Client Notification Center (`/notifications`)**:
+  - Lists past notifications with read/unread statuses and mark-all-as-read capability.
+  - Contextual deep action buttons with safe optional chaining:
+    - **"View Order"** (with public order ID tag) deep-linking directly to `/orders/[orderId]` for `ORDER_CREATED` or `ORDER_STATUS_UPDATED` events.
+    - **"Browse Catalog"** deep-linking to `/products` for `ACCOUNT_ACTIVATED` events.

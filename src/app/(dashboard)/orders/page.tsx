@@ -7,7 +7,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useOrdersQuery } from "@/services/order/order.hook";
 import { OrderSkeleton } from "@/components/skeleton/order-skeleton";
 import { OrderCard } from "@/components/dashboard/order-card";
-import { OrderDetailModal } from "@/components/dashboard/order-detail-modal";
 import { OrderTabs } from "@/components/dashboard/order-tabs";
 import { Order, OrderStatus } from "@/types/order.types";
 import { PackageCheck } from "lucide-react";
@@ -17,7 +16,6 @@ export default function OrdersPage() {
   const { user, ready } = useAuth();
   const { data: responseBody, isLoading } = useOrdersQuery(ready && !!user);
   const [activeTab, setActiveTab] = useState<OrderStatus>("IN_PROCESS");
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   useEffect(() => {
     if (ready && !user) {
@@ -59,17 +57,13 @@ export default function OrdersPage() {
             {currentOrders?.length > 0 ? (
               <div className="mt-6 space-y-4">
                 {currentOrders?.map((order) => (
-                  <OrderCard
-                    key={order?._id}
-                    order={order}
-                    onViewDetails={setSelectedOrder}
-                  />
+                  <OrderCard key={order?._id} order={order} />
                 ))}
               </div>
             ) : (
               <section className="mx-auto mt-12 max-w-xl rounded-2xl border border-dashed border-border p-8 text-center">
                 <PackageCheck className="mx-auto size-10 text-muted-foreground" />
-                <h2 className="mt-5 font-serif text-2xl font-bold">
+                <h2 className="font-serif text-2xl font-bold mt-5">
                   No {activeTab === "IN_PROCESS" ? "in-process" : "delivered"}{" "}
                   orders
                 </h2>
@@ -83,12 +77,6 @@ export default function OrdersPage() {
           </div>
         )}
       </main>
-
-      <OrderDetailModal
-        order={selectedOrder}
-        open={!!selectedOrder}
-        onOpenChange={(open) => !open && setSelectedOrder(null)}
-      />
     </div>
   );
 }

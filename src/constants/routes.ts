@@ -8,6 +8,7 @@ export const ROUTES = {
   CATALOGUE_CATEGORY: (category: string) => `/catalogue?category=${category}`,
   CHECKOUT: "/checkout",
   ORDERS: "/orders",
+  ORDER_DETAIL: (id: string) => `/orders/${id}`,
   NOTIFICATIONS: "/notifications",
   PRODUCT_DETAIL: (slug: string) => `/products/${slug}`,
 };

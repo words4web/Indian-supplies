@@ -29,3 +29,11 @@ export const useOrdersQuery = (enabled: boolean) => {
     enabled,
   });
 };
+
+export const useOrderDetailQuery = (id: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: ["order", id],
+    queryFn: () => orderService.getById(id),
+    enabled: enabled && !!id,
+  });
+};

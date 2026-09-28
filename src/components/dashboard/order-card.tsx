@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { OrderCardProps } from "@/types/order.types";
 import { formatPounds } from "@/lib/format";
+import { ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 import { Eye, Package, Calendar, Receipt, CreditCard } from "lucide-react";
 
@@ -91,9 +93,11 @@ export function OrderCard({ order, onViewDetails }: OrderCardProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onViewDetails(order)}
+          asChild
           className="w-full sm:w-auto gap-2 font-bold cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors shrink-0">
-          <Eye className="size-4" /> View Details
+          <Link href={ROUTES.ORDER_DETAIL(order?._id)}>
+            <Eye className="size-4" /> View Details
+          </Link>
         </Button>
       </div>
     </div>

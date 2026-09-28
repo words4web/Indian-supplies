@@ -11,6 +11,7 @@ export const API_ROUTES = {
   PRODUCTS: "/user/products",
   CART: "/user/cart",
   ORDERS: "/user/orders",
+  ORDER_DETAIL: (id: string) => `/user/orders/${id}`,
   NOTIFICATIONS: {
     ROOT: "/user/notification",
     UNREAD_COUNT: "/user/notification/unread-count",

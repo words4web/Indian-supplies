@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { PortalHeader } from "@/components/portal-header";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,6 +18,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Inbox,
+  Eye,
+  ShoppingBag,
 } from "lucide-react";
 import { NotificationSkeleton } from "@/components/skeleton/notification-skeleton";
 import { NotificationItem } from "@/types/notification.types";
@@ -100,29 +103,29 @@ export default function NotificationsPage() {
             <div className="space-y-3.5">
               {notifications.map((item) => (
                 <div
-                  key={item._id}
+                  key={item?._id}
                   onClick={() => handleMarkAsRead(item)}
                   className={`group relative flex flex-col gap-2.5 rounded-2xl border p-5 sm:p-6 transition-all ${
-                    item.isRead
+                    item?.isRead
                       ? "border-border/60 bg-card/60 text-muted-foreground"
                       : "border-primary/30 bg-primary/5 text-foreground shadow-xs cursor-pointer hover:border-primary/50 hover:bg-primary/10"
                   }`}>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
-                      {!item.isRead && (
+                      {!item?.isRead && (
                         <span className="size-2.5 rounded-full bg-primary shrink-0" />
                       )}
                       <h3
                         className={`text-base sm:text-lg tracking-tight ${
-                          item.isRead
+                          item?.isRead
                             ? "font-semibold text-foreground/90"
                             : "font-bold text-foreground"
                         }`}>
-                        {item.title}
+                        {item?.title}
                       </h3>
                     </div>
                     <span className="text-xs font-medium text-muted-foreground shrink-0 pt-0.5">
-                      {item.createdAt
+                      {item?.createdAt
                         ? new Date(item.createdAt).toLocaleDateString(
                             undefined,
                             {
@@ -136,15 +139,51 @@ export default function NotificationsPage() {
                     </span>
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">
-                    {item.body}
+                    {item?.body}
                   </p>
-                  {!item.isRead && (
-                    <div className="mt-1 flex justify-end">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
-                        <CheckCircle className="size-3.5" /> Mark as read
-                      </span>
+
+                  <div className="mt-2 flex items-center justify-between gap-3 pt-2 border-t border-border/40">
+                    <div className="flex items-center gap-2">
+                      {item?.metadata?.orderId ? (
+                        <Link
+                          href={`/orders/${item?.metadata?.orderId}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMarkAsRead(item);
+                          }}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-background px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary">
+                          <Eye className="size-3.5 text-primary" />
+                          View Order
+                          {item?.metadata?.publicOrderId
+                            ? ` (${item?.metadata?.publicOrderId})`
+                            : ""}
+                        </Link>
+                      ) : item?.type === "ACCOUNT_ACTIVATED" ? (
+                        <Link
+                          href="/products"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMarkAsRead(item);
+                          }}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-background px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary">
+                          <ShoppingBag className="size-3.5 text-primary" />
+                          Browse Catalog
+                        </Link>
+                      ) : null}
                     </div>
-                  )}
+
+                    {!item?.isRead && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAsRead(item);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline cursor-pointer">
+                        <CheckCircle className="size-3.5" /> Mark as read
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
