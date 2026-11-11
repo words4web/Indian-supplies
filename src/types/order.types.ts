@@ -73,6 +73,7 @@ export interface OrderSummaryProps {
   vat: number;
   placing: boolean;
   disabled: boolean;
+  minOrderAmount?: number;
 }
 
 export interface DeliverySelectionProps {
@@ -97,4 +98,13 @@ export interface OrderSuccessProps {
     delivery: DeliveryDetails;
     status: OrderStatus;
   };
+}
+
+export type PaymentMethod = "STRIPE" | "CREDIT";
+
+export interface PaymentSelectionProps {
+  paymentMethod: PaymentMethod | null;
+  onSelectPaymentMethod: (method: PaymentMethod) => void;
+  allowCredit: boolean;
+  creditLimit: number;
 }

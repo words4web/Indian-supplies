@@ -12,6 +12,7 @@ import { saveLastOrder } from "@/utils/order";
 import { useCreateOrder } from "@/services/order/order.hook";
 import { OrderSummary } from "@/components/dashboard/order-summary";
 import { DeliverySelection } from "@/components/dashboard/delivery-selection";
+import { PaymentSelection } from "@/components/dashboard/payment-selection";
 import { OrderSuccess } from "@/components/dashboard/order-success";
 import Link from "next/link";
 import { CheckoutSkeleton } from "@/components/skeleton/checkout-skeleton";
@@ -20,7 +21,14 @@ export default function CheckoutPage() {
   const { items, subtotal, vat = 0, clearCart, ready: cartReady } = useCart();
   const { user, ready: authReady } = useAuth();
 
+  const allowCredit = Boolean(user?.allowCredit);
+  const creditLimit = Number(user?.creditLimit || 0);
+  const minOrderAmount = Number(user?.minOrderAmount ?? 150);
+
   const [selectedAddressId, setSelectedAddressId] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<
+    "STRIPE" | "CREDIT" | null
+  >(null);
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState<any | null>(null);
@@ -54,6 +62,13 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!paymentMethod) {
+      const msg = "Please select a payment method.";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     if (!items.length) {
       const msg = "Your basket is empty.";
       setError(msg);
@@ -61,8 +76,17 @@ export default function CheckoutPage() {
       return;
     }
 
+    const estimatedTotal = subtotal + vat;
+    if (estimatedTotal < minOrderAmount) {
+      const msg = `Minimum order delivery requirement is £${minOrderAmount.toFixed(2)}. Current total is £${estimatedTotal.toFixed(2)}.`;
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     createOrderMutation.mutate({
       addressId: selectedAddressId,
+      paymentMethod,
       notes: notes?.trim() || undefined,
     });
   }
@@ -125,12 +149,20 @@ export default function CheckoutPage() {
                   notes={notes}
                   onChangeNotes={setNotes}
                 />
+
+                <PaymentSelection
+                  paymentMethod={paymentMethod}
+                  onSelectPaymentMethod={setPaymentMethod}
+                  allowCredit={allowCredit}
+                  creditLimit={creditLimit}
+                />
               </div>
               <div className="min-w-0 w-full">
                 <OrderSummary
                   items={items}
                   subtotal={subtotal}
                   vat={vat}
+                  minOrderAmount={minOrderAmount}
                   placing={createOrderMutation.isPending}
                   disabled={createOrderMutation.isPending}
                 />

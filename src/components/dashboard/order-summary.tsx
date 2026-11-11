@@ -12,8 +12,11 @@ export function OrderSummary({
   vat,
   placing,
   disabled,
+  minOrderAmount = 150,
 }: OrderSummaryProps) {
   const estimatedTotal = subtotal + vat;
+  const isBelowMin = estimatedTotal < minOrderAmount;
+  const difference = Math.max(0, minOrderAmount - estimatedTotal);
 
   return (
     <aside className="order-first lg:order-last h-fit rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-sm space-y-4 w-full min-w-0 max-w-full">
@@ -98,11 +101,22 @@ export function OrderSummary({
         </span>
       </div>
 
+      {isBelowMin && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+          <p className="font-bold">
+            Minimum order for delivery is {formatPounds(minOrderAmount)}
+          </p>
+          <p className="text-[11px] opacity-90">
+            Please add {formatPounds(difference)} more to qualify for delivery.
+          </p>
+        </div>
+      )}
+
       <Button
         type="submit"
-        className="mt-2 w-full h-11 sm:h-12 rounded-xl font-bold text-sm shadow-md cursor-pointer transition-all hover:shadow-lg"
+        className="mt-2 w-full h-11 sm:h-12 rounded-xl font-bold text-sm shadow-md cursor-pointer transition-all hover:shadow-lg disabled:cursor-not-allowed"
         size="lg"
-        disabled={disabled || placing}>
+        disabled={disabled || placing || isBelowMin}>
         {placing ? "Sending order…" : "Place order request"}{" "}
         <ArrowRight className="size-4 ml-1.5" />
       </Button>

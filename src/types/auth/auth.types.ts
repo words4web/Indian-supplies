@@ -4,6 +4,9 @@ export interface AuthUser {
   email: string;
   business: string;
   addresses?: any[];
+  allowCredit?: boolean;
+  creditLimit?: number;
+  minOrderAmount?: number;
 }
 
 export interface AuthState {

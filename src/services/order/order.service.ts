@@ -2,7 +2,11 @@ import { axiosInstance } from "@/lib/axiosInstance";
 import { API_ROUTES } from "@/constants/api";
 
 export const orderService = {
-  create: async (payload: { addressId: string; notes?: string }) => {
+  create: async (payload: {
+    addressId: string;
+    paymentMethod?: "STRIPE" | "CREDIT";
+    notes?: string;
+  }) => {
     const response = await axiosInstance.post(API_ROUTES.ORDERS, payload);
     return response?.data;
   },

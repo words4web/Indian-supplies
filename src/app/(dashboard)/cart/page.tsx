@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PortalHeader } from "@/components/portal-header";
 import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
 import { formatPounds } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { CartSkeleton } from "@/components/skeleton/cart-skeleton";
@@ -16,10 +17,14 @@ export default function CartPage() {
     removeItem,
     subtotal,
     vat = 0,
-    ready,
+    ready: cartReady,
   } = useCart();
+  const { user, ready: authReady } = useAuth();
 
+  const minOrderAmount = Number(user?.minOrderAmount ?? 150);
   const estimatedTotal = subtotal + vat;
+  const isBelowMin = estimatedTotal < minOrderAmount;
+  const ready = cartReady && authReady;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -75,13 +80,32 @@ export default function CartPage() {
                   {formatPounds(estimatedTotal)}
                 </span>
               </div>
+
+              {isBelowMin && (
+                <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+                  <p className="font-bold">
+                    Minimum order for delivery is {formatPounds(minOrderAmount)}
+                  </p>
+                  <p className="text-[11px] opacity-90">
+                    Add{" "}
+                    {formatPounds(Math.max(0, minOrderAmount - estimatedTotal))}{" "}
+                    more to qualify for delivery.
+                  </p>
+                </div>
+              )}
+
               <Button
-                asChild
-                className="mt-4 w-full h-11 rounded-xl font-bold text-sm shadow-sm"
+                asChild={!isBelowMin}
+                disabled={isBelowMin}
+                className="mt-4 w-full h-11 rounded-xl font-bold text-sm shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 size="lg">
-                <Link href="/checkout">
-                  Continue to delivery <ArrowRight className="size-4 ml-1" />
-                </Link>
+                {!isBelowMin ? (
+                  <Link href="/checkout">
+                    Continue to delivery <ArrowRight className="size-4 ml-1" />
+                  </Link>
+                ) : (
+                  <span>Minimum {formatPounds(minOrderAmount)} required</span>
+                )}
               </Button>
             </aside>
 

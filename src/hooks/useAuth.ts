@@ -33,6 +33,9 @@ export const useProfile = (options?: { enabled?: boolean }) => {
         email: user?.email,
         business: user?.businessName || "",
         addresses: user?.addresses || [],
+        allowCredit: Boolean(user?.allowCredit),
+        creditLimit: Number(user?.creditLimit || 0),
+        minOrderAmount: Number(user?.minOrderAmount ?? 150),
       });
       if (typeof data?.data?.unreadNotificationCount === "number") {
         dispatch(setUnreadCount(data?.data?.unreadNotificationCount));
