@@ -125,12 +125,19 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
   - Sticky WhatsApp/Instagram style bottom navigation bar (`MobileBottomNav`) with 5 primary tabs: **Home**, **Catalogue**, **Cart** (with live numeric badge), **Orders**, and **Profile** (showing user initials avatar).
   - Global CSS safe offset ensures mobile pages, checkout CTAs, and footers never overlap with the bottom bar.
 
-### 2. Mutually Exclusive Catalogue Search & Category Filtering
+### 2. Mutually Exclusive Catalogue Search & Category Filtering (`useCatalogueFilters`)
 
 - **Cross-Category Search**:
   - Typing in the catalogue search box immediately removes any active category parameter from the URL, allowing search across all products.
+  - Zero-latency local input typing (`searchInput`) decoupled from asynchronous URL route transitions eliminates dropped keystrokes.
 - **Category Browsing**:
   - Clicking any category pill resets the search query and loads products matching that specific category.
+- **Browser History & URL Debouncing**:
+  - Search input is debounced at 350ms before updating the URL.
+  - Completed search queries (non-empty trimmed queries after 350ms timeout) use `router.push(..., { scroll: false })` to preserve browser history, allowing users to navigate between prior searches and categories using browser Back/Forward buttons.
+  - Clearing the search input backspaces to empty and uses `router.replace(..., { scroll: false })` to restore the default category without polluting browser history.
+  - Bidirectional sync: external URL changes (such as Back/Forward buttons) update local input state via `lastUrlSearchRef` without race conditions or input loops.
+  - Selecting categories or resetting filters synchronously clears any active search debounce timers.
 
 ### 3. Reusable Product Image Gallery (`ProductImage`)
 

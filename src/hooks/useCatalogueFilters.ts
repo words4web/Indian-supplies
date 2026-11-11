@@ -77,7 +77,11 @@ export function useCatalogueFilters(categories: CategoryItem[]) {
       }
 
       lastUrlSearchRef.current = trimmedInput;
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      if (trimmedInput) {
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      } else {
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
     }, 350);
 
     return () => {
