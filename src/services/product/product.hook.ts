@@ -9,15 +9,19 @@ export const productKeys = {
   detail: (idOrSlug: string) => [...productKeys.details(), idOrSlug] as const,
 };
 
-export const useProducts = (params?: {
-  page?: number;
-  limit?: number;
-  categoryId?: string;
-  search?: string;
-}) => {
+export const useProducts = (
+  params?: {
+    page?: number;
+    limit?: number;
+    categoryId?: string;
+    search?: string;
+  },
+  enabled: boolean = true,
+) => {
   return useQuery({
     queryKey: productKeys.list(params || {}),
     queryFn: () => productService.list(params),
+    enabled,
   });
 };
 

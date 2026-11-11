@@ -35,18 +35,27 @@ export default function CataloguePage() {
     setQuery,
   } = useCatalogueFilters(categories);
 
+  const isSearching = Boolean(debouncedQuery?.trim());
+  const canFetchProducts =
+    isSearching || (!isLoadingCategories && !isCategoriesError);
+
   const {
     data: productsData,
     isLoading: isLoadingProducts,
     isError: isProductsError,
     error: productsError,
     refetch: refetchProducts,
-  } = useProducts({
-    limit: 100,
-    categoryId: activeCategory?.id || undefined,
-    search: debouncedQuery?.trim() || undefined,
-  });
+  } = useProducts(
+    {
+      limit: 100,
+      categoryId: activeCategory?.id || undefined,
+      search: debouncedQuery?.trim() || undefined,
+    },
+    canFetchProducts,
+  );
   const fetchedProducts = productsData?.data?.products || [];
+  const showProductsLoading =
+    (!isSearching && isLoadingCategories) || isLoadingProducts;
 
   const products = fetchedProducts?.map((prod: any) => ({
     id: prod?._id,
@@ -91,11 +100,13 @@ export default function CataloguePage() {
             }
             onRetry={() => {
               refetchCategories();
-              refetchProducts();
+              if (canFetchProducts) {
+                refetchProducts();
+              }
             }}
             className="mt-6 sm:mt-8"
           />
-        ) : isLoadingProducts ? (
+        ) : showProductsLoading ? (
           <div className="mt-5 sm:mt-8">
             <ProductGridSkeleton count={8} />
           </div>
