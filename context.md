@@ -20,6 +20,7 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 - **Push Notifications & Messaging**: Firebase Web SDK (`firebase/app`, `firebase/messaging`) + Service Worker
 - **Styling**: Tailwind CSS 4.3.3 + PostCSS, utilizing `@base-ui/react`, `shadcn`, and `sonner` for toast notifications
 - **Icons**: `lucide-react`
+- **Theming**: Zero-dependency `ThemeProvider` (`theme: "light" | "dark"`) with `localStorage` persistence, pre-hydration anti-flicker script, and animated `ThemeToggle` in Desktop & Mobile navigation headers.
 - **Language**: TypeScript 5.7.3
 
 ---

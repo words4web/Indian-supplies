@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { ROUTES } from "@/constants/routes";
 import { NAVIGATION_ITEMS, HEADER_UTILITIES } from "@/data/navigation";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export function DesktopHeader() {
   const pathname = usePathname();
@@ -77,13 +78,15 @@ export function DesktopHeader() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2.5 lg:gap-3">
+        <div className="flex items-center gap-2 lg:gap-2.5">
           <Link
             href={HEADER_UTILITIES.search.href}
             aria-label={HEADER_UTILITIES.search.ariaLabel}
             className="flex size-11 lg:size-12 items-center justify-center rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
             <Search className="size-5 lg:size-6" />
           </Link>
+
+          <ThemeToggle size="md" />
 
           {user && (
             <>

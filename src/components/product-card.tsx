@@ -39,23 +39,23 @@ export function ProductCard({ product }: { product: Product }) {
             </div>
           </div>
 
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-zinc-900 via-neutral-900 to-zinc-950 text-white p-3.5 sm:p-4 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden] border-b border-white/10 shadow-inner">
+          <div className="absolute inset-0 w-full h-full bg-card dark:bg-card text-foreground dark:text-foreground p-3.5 sm:p-4 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden] border-b border-border/80 shadow-inner">
             <div className="space-y-2 flex-1 min-h-0 flex flex-col">
               <div>
-                <h3 className="font-serif text-sm sm:text-base font-extrabold leading-snug text-white line-clamp-2">
+                <h3 className="font-serif text-sm sm:text-base font-extrabold leading-snug text-foreground line-clamp-2">
                   {product?.name}
                 </h3>
-                <p className="text-[11px] sm:text-xs font-semibold text-emerald-400/90 mt-0.5">
+                <p className="text-[11px] sm:text-xs font-semibold text-primary mt-0.5">
                   {product?.pack
                     ? `Pack size · ${product?.pack}`
                     : "Wholesale pack"}
                 </p>
               </div>
-              <div className="flex-1 overflow-y-auto scrollbar-none pr-0.5 text-xs sm:text-sm text-white leading-relaxed border-t border-white/15 pt-2 cursor-pointer font-normal">
+              <div className="flex-1 overflow-y-auto scrollbar-none pr-0.5 text-xs sm:text-sm text-muted-foreground leading-relaxed border-t border-border/60 pt-2 cursor-pointer font-normal">
                 {product?.description ? (
                   product.description
                 ) : (
-                  <span className="italic text-white/50">
+                  <span className="italic text-muted-foreground/60">
                     No detailed description available for this product.
                   </span>
                 )}

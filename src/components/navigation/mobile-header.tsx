@@ -8,6 +8,7 @@ import { RootState } from "@/lib/store";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/constants/routes";
 import { HEADER_UTILITIES } from "@/data/navigation";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export function MobileHeader() {
   const { user } = useAuth();
@@ -42,6 +43,8 @@ export function MobileHeader() {
             className="flex size-10 items-center justify-center rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground active:scale-95 transition-all">
             <Search className="size-5" />
           </Link>
+
+          <ThemeToggle size="sm" />
 
           {user && (
             <Link
