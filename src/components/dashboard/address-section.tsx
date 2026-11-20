@@ -12,17 +12,27 @@ export function AddressSection({
   onDeleteAddress,
   isDeleting,
 }: AddressSectionProps) {
+  const isMaxReached = (addresses?.length || 0) >= 5;
+
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-serif text-xl font-bold tracking-tight">
-          Delivery Addresses
-        </h2>
+        <div>
+          <h2 className="font-serif text-xl font-bold tracking-tight">
+            Delivery Addresses
+          </h2>
+          {isMaxReached && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+              Maximum 5 addresses reached.
+            </p>
+          )}
+        </div>
         <Button
           variant="outline"
           size="sm"
           onClick={onAddAddress}
-          className="rounded-xl flex items-center gap-1.5">
+          disabled={isMaxReached}
+          className="rounded-xl flex items-center gap-1.5 disabled:opacity-50">
           <Plus className="size-4" /> Add
         </Button>
       </div>
