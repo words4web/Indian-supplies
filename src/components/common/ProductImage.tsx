@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +64,12 @@ export function ProductImage({
   priority = false,
   aspectRatio = "square",
 }: ProductImageProps) {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [src]);
+
   const variant = SIZE_VARIANTS[size] || SIZE_VARIANTS.full;
 
   const aspectClass =
@@ -80,13 +87,14 @@ export function ProductImage({
         aspectClass,
         containerClassName,
       )}>
-      {src ? (
+      {src && !hasError ? (
         <Image
           src={src}
           alt={alt}
           fill
           sizes={variant.sizes}
           priority={priority}
+          onError={() => setHasError(true)}
           className={cn(
             "object-cover transition-transform duration-300",
             className,
