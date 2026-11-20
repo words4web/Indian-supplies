@@ -58,7 +58,7 @@ export function NotificationListener() {
 
         if (orderId) {
           queryClient.invalidateQueries({
-            queryKey: ["order", "detail", orderId],
+            queryKey: ["order", orderId],
           });
         }
       });

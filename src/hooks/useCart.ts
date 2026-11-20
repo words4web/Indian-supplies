@@ -100,22 +100,24 @@ export function useCart() {
     return items?.length || 0;
   }, [items]);
 
-  const subtotal = useMemo(() => {
-    return items?.reduce(
-      (sum, item) => sum + (item?.product?.price ?? 0) * item?.quantity,
-      0,
-    );
-  }, [items]);
+  const { subtotal, vat } = useMemo(() => {
+    const raw = items?.reduce(
+      (acc, item) => {
+        const itemPrice = item?.product?.price ?? 0;
+        const itemSubtotal = itemPrice * item.quantity;
+        const itemVat = item?.product?.isVatApplicable ? itemSubtotal * 0.2 : 0;
 
-  const vat = useMemo(() => {
-    return items.reduce(
-      (sum, item) =>
-        sum +
-        (item?.product?.isVatApplicable
-          ? (item?.product.price ?? 0) * 0.2 * item?.quantity
-          : 0),
-      0,
+        acc.subtotal += itemSubtotal;
+        acc.vat += itemVat;
+        return acc;
+      },
+      { subtotal: 0, vat: 0 },
     );
+
+    return {
+      subtotal: Math.round((raw?.subtotal ?? 0) * 100) / 100,
+      vat: Math.round((raw?.vat ?? 0) * 100) / 100,
+    };
   }, [items]);
 
   return {

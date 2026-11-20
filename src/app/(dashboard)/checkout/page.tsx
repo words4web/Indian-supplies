@@ -18,7 +18,7 @@ import Link from "next/link";
 import { CheckoutSkeleton } from "@/components/skeleton/checkout-skeleton";
 
 export default function CheckoutPage() {
-  const { items, subtotal, vat = 0, clearCart, ready: cartReady } = useCart();
+  const { items, subtotal, vat = 0, ready: cartReady } = useCart();
   const { user, ready: authReady } = useAuth();
 
   const allowCredit = Boolean(user?.allowCredit);
@@ -37,7 +37,6 @@ export default function CheckoutPage() {
     onSuccess: (response) => {
       const order = response?.data;
       saveLastOrder(order);
-      clearCart();
       setConfirmation(order);
     },
     onError: (err: any) => {
