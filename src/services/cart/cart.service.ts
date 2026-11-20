@@ -2,8 +2,8 @@ import { axiosInstance } from "@/lib/axiosInstance";
 import { API_ROUTES } from "@/constants/api";
 
 export const cartService = {
-  getCart: async () => {
-    const response = await axiosInstance.get(API_ROUTES.CART);
+  getCart: async (signal?: AbortSignal) => {
+    const response = await axiosInstance.get(API_ROUTES.CART, { signal });
     return response?.data;
   },
 

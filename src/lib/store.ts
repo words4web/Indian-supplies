@@ -11,7 +11,6 @@ import {
 } from "redux-persist";
 import sessionStorage from "redux-persist/lib/storage/session";
 import authReducer from "./store/authSlice";
-import cartReducer from "./store/cartSlice";
 import notificationReducer from "./store/notificationSlice";
 
 const authPersistConfig = {
@@ -20,18 +19,11 @@ const authPersistConfig = {
   blacklist: ["accessToken"],
 };
 
-const cartPersistConfig = {
-  key: "cart",
-  storage: sessionStorage,
-};
-
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
 
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
-    cart: persistedCartReducer,
     notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -1,26 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Check, Plus } from "lucide-react";
-import { useState } from "react";
 import type { Product } from "@/types/product/product.types";
-import { useCart } from "@/hooks/useCart";
 import { formatPounds } from "@/lib/format";
-import { Button } from "@/components/ui/button";
 import { ProductVisual } from "@/components/product-visual";
-import { useAuth } from "@/hooks/useAuth";
+import { CartQuantityControl } from "@/components/common/CartQuantityControl";
 import { ROUTES } from "@/constants/routes";
 
 export function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
-  const { addItem } = useCart();
-  const { user } = useAuth();
-  const [added, setAdded] = useState(false);
-  function add() {
-    addItem(product);
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1400);
-  }
   const productHref = ROUTES.PRODUCT_DETAIL(product?.slug);
 
   const handleCardClick = () => {
@@ -82,40 +70,7 @@ export function ProductCard({ product }: { product: Product }) {
           <p className="font-serif text-sm sm:text-lg font-extrabold text-foreground">
             {formatPounds(product?.price)}
           </p>
-          {user ? (
-            <Button
-              size="sm"
-              variant={added ? "secondary" : "default"}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                add();
-              }}
-              className="relative z-10 cursor-pointer h-7 sm:h-8 px-2 sm:px-3 text-xs"
-              aria-label={`${added ? "Added" : "Add"} ${product?.name} to basket`}>
-              {added ? (
-                <Check className="size-3.5 sm:size-4" />
-              ) : (
-                <Plus className="size-3.5 sm:size-4" />
-              )}
-              <span className="hidden sm:inline">
-                {added ? "Added" : "Add"}
-              </span>
-            </Button>
-          ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                router.push(ROUTES.LOGIN);
-              }}
-              className="relative z-10 text-[10px] sm:text-[11px] h-7 sm:h-8 px-2 sm:px-3 cursor-pointer"
-              aria-label="Login to add to basket">
-              Login to Add
-            </Button>
-          )}
+          <CartQuantityControl product={product} size="sm" showAddButtonWhenZero />
         </div>
       </div>
     </article>

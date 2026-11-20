@@ -51,7 +51,7 @@ export function useCart() {
   const addItem = useCallback(
     (product: Product, quantity = 1) => {
       if (user) {
-        addToCartMutation.mutate({ productId: product?.id, quantity });
+        addToCartMutation.mutate({ productId: product?.id, quantity, product });
       }
     },
     [user, addToCartMutation],
@@ -66,7 +66,11 @@ export function useCart() {
 
       const diff = quantity - currentItem?.quantity;
       if (diff > 0) {
-        addToCartMutation.mutate({ productId: id, quantity: diff });
+        addToCartMutation.mutate({
+          productId: id,
+          quantity: diff,
+          product: currentItem.product,
+        });
       } else if (diff < 0) {
         removeFromCartMutation.mutate({
           productId: id,

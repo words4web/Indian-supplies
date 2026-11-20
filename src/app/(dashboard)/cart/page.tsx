@@ -13,7 +13,6 @@ import { CartItemCard } from "@/components/dashboard/cart-item-card";
 export default function CartPage() {
   const {
     items,
-    updateQuantity,
     removeItem,
     subtotal,
     vat = 0,
@@ -114,7 +113,6 @@ export default function CartPage() {
                 <CartItemCard
                   key={item?.product?.id}
                   item={item}
-                  updateQuantity={updateQuantity}
                   removeItem={removeItem}
                 />
               ))}

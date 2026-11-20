@@ -15,7 +15,7 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 - **Framework**: Next.js 16.3.0 (using App Router & Turbopack)
 - **Runtime**: React 19 & React DOM 19
 - **State Management**: Redux Toolkit & Redux Persist (`localStorage` for persistent Auth & Notification preferences)
-- **Data Fetching & Cache**: TanStack React Query (`@tanstack/react-query`)
+- **Data Fetching & Cache**: TanStack React Query (`@tanstack/react-query`) with optimistic updates and in-flight query cancellation (`cancelQueries`)
 - **API Client**: Axios (configured with token refresh interceptors)
 - **Push Notifications & Messaging**: Firebase Web SDK (`firebase/app`, `firebase/messaging`) + Service Worker
 - **Styling**: Tailwind CSS 4.3.3 + PostCSS, utilizing `@base-ui/react`, `shadcn`, and `sonner` for toast notifications
@@ -154,7 +154,12 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
 ### 5. State Management & Data Flow
 
 - **Auth Context (`useAuth` & `useAuthFlow`)**: Manages logged-in user profile (`user`, `ready`). Unauthenticated users attempting to access protected pages (`/orders`, `/profile`, `/checkout`) are redirected to `/login`.
-- **Cart Context (`useCart`)**: Synchronizes with server-side cart state using TanStack Query, offering quantity increment, decrement, and item removal.
+- **Cart State Management (`useCart` & TanStack React Query)**:
+  - Serves as the single source of truth using TanStack Query (`queryKey: ["cart", "detail"]`).
+  - **In-flight Query Cancellation**: Every mutation invokes `queryClient.cancelQueries({ queryKey: cartKeys.all })` before dispatching, preventing out-of-order `GET /cart` network responses from overwriting newer local state.
+  - **Optimistic Updates**: Adds, updates, and removals update the React Query cache immediately in `onMutate` (0ms perceived latency), preventing visual delay on the cart badge and item list.
+  - **Automatic Rollback**: On API errors, `onError` restores the previous cart cache snapshot and notifies the user via Sonner toast.
+  - **Debounced Stepper Controls**: Rapid `+` / `-` clicks in `CartItemCard` update local state at 0ms latency and debounce network calls by 350ms, eliminating request storms and cart value jumping.
 - **FCM Push Notification Lifecycle (`useFcmLifecycle` & `NotificationListener`)**:
   - Automatically requests browser permissions, registers `firebase-messaging-sw.js`, fetches FCM tokens, and syncs device tokens with `/api/v1/user/notification/devices/sync`.
   - Automatically revokes tokens via `/devices/remove` on logout or when toggled off in settings.

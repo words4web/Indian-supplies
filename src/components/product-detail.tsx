@@ -1,25 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Check, Minus, Plus, ShoppingCart } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { ProductImage } from "@/components/common/ProductImage";
 import type { Product } from "@/types/product/product.types";
-import { useCart } from "@/hooks/useCart";
 import { formatPounds } from "@/lib/format";
-import { Button } from "@/components/ui/button";
 import { ProductVisual } from "@/components/product-visual";
 import { ProductGrid } from "@/components/product-card";
-import { useAuth } from "@/hooks/useAuth";
-import { ROUTES } from "@/constants/routes";
+import { CartQuantityControl } from "@/components/common/CartQuantityControl";
 
 export function ProductDetail({ product }: { product: Product }) {
   const router = useRouter();
-  const { addItem } = useCart();
-  const { user } = useAuth();
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const images =
@@ -28,12 +20,6 @@ export function ProductDetail({ product }: { product: Product }) {
       : product?.imageUrl
         ? [product?.imageUrl]
         : [];
-
-  function add() {
-    addItem(product, quantity);
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1600);
-  }
 
   const relatedProductsList = Array.isArray(product?.relatedProducts)
     ? product?.relatedProducts.map((rel: any) => ({
@@ -166,49 +152,13 @@ export function ProductDetail({ product }: { product: Product }) {
                 </div>
               </div>
 
-              <div className="flex flex-row items-center gap-2.5 sm:gap-3">
-                <div className="flex items-center justify-between rounded-xl border border-input bg-card shadow-sm overflow-hidden h-10 sm:h-11 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={!user}
-                    className="px-3 sm:px-4 h-full hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer"
-                    aria-label="Decrease quantity">
-                    <Minus className="size-3.5 sm:size-4" />
-                  </button>
-                  <span className="px-3 sm:px-4 text-xs sm:text-sm font-extrabold min-w-[2rem] sm:min-w-[2.5rem] text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(quantity + 1)}
-                    disabled={!user}
-                    className="px-3 sm:px-4 h-full hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer"
-                    aria-label="Increase quantity">
-                    <Plus className="size-3.5 sm:size-4" />
-                  </button>
-                </div>
-
-                {user ? (
-                  <Button
-                    onClick={add}
-                    size="lg"
-                    className="flex-1 h-10 sm:h-11 text-xs sm:text-sm rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer">
-                    {added ? (
-                      <Check className="size-3.5 sm:size-4" />
-                    ) : (
-                      <ShoppingCart className="size-3.5 sm:size-4" />
-                    )}
-                    <span>{added ? "Added to cart" : "Add to cart"}</span>
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    className="flex-1 h-10 sm:h-11 text-xs sm:text-sm rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-                    size="lg">
-                    <Link href={ROUTES.LOGIN}>Login to Add</Link>
-                  </Button>
-                )}
+              <div className="flex flex-row items-center gap-2.5 sm:gap-3 w-full">
+                <CartQuantityControl
+                  product={product}
+                  size="lg"
+                  showAddButtonWhenZero
+                  className="w-full"
+                />
               </div>
             </div>
           </div>

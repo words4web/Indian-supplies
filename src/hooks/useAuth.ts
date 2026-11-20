@@ -6,7 +6,7 @@ import { AuthUser } from "@/types/auth/auth.types";
 import { useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth/auth.service";
-import { clearCart } from "@/lib/store/cartSlice";
+import { cartKeys } from "@/services/cart/cart.hook";
 import { toast } from "sonner";
 
 export const useProfile = (options?: { enabled?: boolean }) => {
@@ -70,7 +70,8 @@ export function useAuth() {
       toast.error(err.response?.data?.message || "Logout failed.");
     } finally {
       dispatch(clearAuth());
-      dispatch(clearCart());
+      queryClient.setQueryData(cartKeys.detail(), null);
+      queryClient.removeQueries({ queryKey: cartKeys.all });
       queryClient.clear();
       if (typeof window !== "undefined") {
         localStorage.clear();
