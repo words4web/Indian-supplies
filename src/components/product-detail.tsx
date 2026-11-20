@@ -152,12 +152,11 @@ export function ProductDetail({ product }: { product: Product }) {
                 </div>
               </div>
 
-              <div className="flex flex-row items-center gap-2.5 sm:gap-3 w-full">
+              <div className="flex flex-row items-center gap-2.5 sm:gap-3">
                 <CartQuantityControl
                   product={product}
-                  size="lg"
+                  size="md"
                   showAddButtonWhenZero
-                  className="w-full"
                 />
               </div>
             </div>
