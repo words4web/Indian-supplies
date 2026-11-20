@@ -1,4 +1,5 @@
 import React from "react";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export default function AuthLayout({
   children,
@@ -6,12 +7,16 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-background">
-      <div className="flex-1 grid lg:grid-cols-2 h-full w-full">
-        <div className="hidden lg:flex relative overflow-hidden bg-gradient-to-br from-[#081a11] via-background to-background p-16 flex-col justify-center text-primary-foreground border-r border-border/40">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(16,185,129,0.05),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:24px_24px]" />
+    <div className="h-screen w-screen overflow-hidden flex bg-background relative">
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50">
+        <ThemeToggle
+          size="sm"
+          className="border border-border/80 bg-card/80 backdrop-blur-md shadow-xs hover:bg-card"
+        />
+      </div>
 
+      <div className="flex-1 grid lg:grid-cols-2 h-full w-full">
+        <div className="hidden lg:flex relative overflow-hidden bg-muted/40 p-16 flex-col justify-center border-r border-border/60">
           <div className="relative z-10 max-w-lg space-y-8">
             <div className="space-y-4">
               <span className="text-xs font-bold uppercase tracking-[.25em] text-primary">
@@ -67,7 +72,7 @@ export default function AuthLayout({
           </div>
         </div>
 
-        <div className="flex items-center justify-center p-6 sm:p-12 relative bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.02),transparent_70%)] h-full overflow-y-auto">
+        <div className="flex items-center justify-center p-6 sm:p-12 relative bg-background h-full overflow-y-auto">
           <div className="w-full max-w-[480px] z-10">{children}</div>
         </div>
       </div>

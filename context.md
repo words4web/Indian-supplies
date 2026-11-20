@@ -152,7 +152,15 @@ This document provides a comprehensive overview of the **Indian Supplies Fronten
   - Items, prices, and address snapshots are securely validated and calculated on the backend from the user's MongoDB `Cart`.
   - Upon success, clears client cart cache and displays the `OrderSuccess` confirmation view.
 
-### 5. State Management & Data Flow
+### 6. Wholesale Account Management & Profile
+- **Account Opening Details & Profile Editing (`/profile`)**:
+  - Displays registered business profile: Registered Business Name, Company Registration Number, VAT Registration Number, Director Details (name, address, phone, email), Contact Details, and Accounts Payable Details.
+  - Interactive `EditProfileModal` with responsive tabbed sections and strict UK phone number validation (`+44` / `07` UK format validation).
+  - Graceful session clearance on user logout: handles expired 401 tokens silently without popping up error toasts.
+
+### 7. Theming & Visual Aesthetics
+- **Theme Switcher**: Supported in both Desktop & Mobile navigation headers with pre-hydration anti-flicker script.
+- **Glassmorphism & Legibility**: Auth layouts and modals styled with high-contrast text layers and subtle background backdrops ensuring full visibility across light and dark themes.
 
 - **Auth Context (`useAuth` & `useAuthFlow`)**: Manages logged-in user profile (`user`, `ready`). Unauthenticated users attempting to access protected pages (`/orders`, `/profile`, `/checkout`) are redirected to `/login`.
 - **Cart State Management (`useCart` & TanStack React Query)**:

@@ -71,8 +71,10 @@ export function useAuth() {
       await authService.logout();
       toast.success("Successfully logged out!");
     } catch (err: any) {
-      console.error("Logout failed:", err);
-      toast.error(err.response?.data?.message || "Logout failed.");
+      if (err?.response?.status !== 401) {
+        console.error("Logout failed:", err);
+        toast.error(err.response?.data?.message || "Logout failed.");
+      }
     } finally {
       dispatch(clearAuth());
       queryClient.setQueryData(cartKeys.detail(), null);
