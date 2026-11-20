@@ -36,6 +36,11 @@ export const useProfile = (options?: { enabled?: boolean }) => {
         allowCredit: Boolean(user?.allowCredit),
         creditLimit: Number(user?.creditLimit || 0),
         minOrderAmount: Number(user?.minOrderAmount ?? 150),
+        companyRegistrationNumber: user?.companyRegistrationNumber,
+        vatNumber: user?.vatNumber,
+        registeredAddress: user?.registeredAddress,
+        directorDetails: user?.directorDetails,
+        accountsPayable: user?.accountsPayable,
       });
       if (typeof data?.data?.unreadNotificationCount === "number") {
         dispatch(setUnreadCount(data?.data?.unreadNotificationCount));

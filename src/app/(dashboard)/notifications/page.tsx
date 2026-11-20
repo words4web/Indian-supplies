@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { NotificationSkeleton } from "@/components/skeleton/notification-skeleton";
 import { NotificationItem } from "@/types/notification.types";
+import { ROUTES } from "@/constants/routes";
 
 const LIMIT = 10;
 
@@ -160,7 +161,7 @@ export default function NotificationsPage() {
                         </Link>
                       ) : item?.type === "ACCOUNT_ACTIVATED" ? (
                         <Link
-                          href="/products"
+                          href={ROUTES.CATALOGUE}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleMarkAsRead(item);

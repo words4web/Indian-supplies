@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "./auth.service";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -54,6 +54,25 @@ export const useSignup = (options?: {
       toast.error(
         error.response?.data?.message ||
           "Registration failed. Please try again.",
+      );
+    },
+  });
+};
+
+export const useUpdateProfile = (options?: {
+  onSuccess?: (data: any) => void;
+}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: any) => authService.updateProfile(payload),
+    onSuccess: (res) => {
+      toast.success(res?.message || "Profile updated successfully.");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      options?.onSuccess?.(res);
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response?.data?.message || "Failed to update profile details.",
       );
     },
   });

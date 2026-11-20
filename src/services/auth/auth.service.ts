@@ -27,4 +27,9 @@ export const authService = {
     const response = await axiosInstance.get(API_ROUTES.PROFILE);
     return response.data;
   },
+
+  updateProfile: async (payload: any) => {
+    const response = await axiosInstance.patch(API_ROUTES.PROFILE, payload);
+    return response.data;
+  },
 };

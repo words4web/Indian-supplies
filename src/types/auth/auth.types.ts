@@ -1,3 +1,17 @@
+export interface ICompanyAddress {
+  streetAddress?: string;
+  building?: string;
+  city?: string;
+  postalCode?: string;
+}
+
+export interface IContactPerson {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+}
+
 export interface AuthUser {
   id: string;
   name: string;
@@ -7,6 +21,11 @@ export interface AuthUser {
   allowCredit?: boolean;
   creditLimit?: number;
   minOrderAmount?: number;
+  companyRegistrationNumber?: string;
+  vatNumber?: string;
+  registeredAddress?: ICompanyAddress;
+  directorDetails?: IContactPerson;
+  accountsPayable?: IContactPerson;
 }
 
 export interface AuthState {
